@@ -29,6 +29,8 @@ public class SecurityConfig {
                 //.httpBasic(Customizer.withDefaults())
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize->authorize
+                        //For Swagger and OpenAPI (Allow access to Swagger and OpenAPI without authentication)
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         //Role
                         .requestMatchers(HttpMethod.GET,"/api/v1/roles").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET,"/api/v1/roles/*").hasRole("ADMIN")
