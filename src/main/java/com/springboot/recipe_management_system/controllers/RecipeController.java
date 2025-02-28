@@ -26,7 +26,6 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-
     @GetMapping("/recipes/{id}")
     public ResponseEntity<RecipeResponseDto> getRecipeById(@PathVariable UUID id){
         return ResponseEntity.ok(recipeService.getRecipeById(id));
@@ -83,10 +82,19 @@ public class RecipeController {
         return new ResponseEntity<>("Recipe created successfully!",HttpStatus.CREATED);
     }
 
+    //TESTING
+    @PutMapping("/recipes/self/{id}")
+    public ResponseEntity<String> updateRecipeForSelf(@PathVariable UUID id,
+                                                      @RequestBody @Valid RecipeRequestDto recipeRequestDto){
+        recipeService.updateRecipe(id,recipeRequestDto,true);
+        return ResponseEntity.ok("Recipe updated successfully!");
+    }
+    //
+
     @PutMapping("/recipes/{id}")
     public ResponseEntity<String> updateRecipe(@PathVariable UUID id,
                                                @RequestBody @Valid RecipeRequestDto recipeRequestDto){
-        recipeService.updateRecipe(id,recipeRequestDto);
+        recipeService.updateRecipe(id,recipeRequestDto,false);
         return ResponseEntity.ok("Recipe updated successfully!");
     }
 

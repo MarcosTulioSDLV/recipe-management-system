@@ -32,7 +32,7 @@ public interface RecipeService {
     void addRecipe(UUID userId, RecipeRequestDto recipeRequestDto);
 
     @Transactional
-    void updateRecipe(UUID id, RecipeRequestDto recipeRequestDto);
+    void updateRecipe(UUID id, RecipeRequestDto recipeRequestDto, boolean isSelf);
 
     @Transactional
     void deleteRecipe(UUID id);

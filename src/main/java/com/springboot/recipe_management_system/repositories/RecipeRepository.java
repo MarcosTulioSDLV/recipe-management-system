@@ -28,4 +28,6 @@ public interface RecipeRepository extends JpaRepository<Recipe,UUID> {
     List<Recipe> findByTitleIgnoreCaseContainingCustom(String title);*/
 
 
+    boolean existsByIdAndUserUsernameNot(UUID recipeId, String username);
+
 }

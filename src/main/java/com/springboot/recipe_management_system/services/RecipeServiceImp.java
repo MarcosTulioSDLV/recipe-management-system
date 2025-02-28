@@ -13,6 +13,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -104,11 +109,15 @@ public class RecipeServiceImp implements RecipeService{
 
     @Override
     @Transactional
-    public void updateRecipe(UUID id, RecipeRequestDto recipeRequestDto) {
+    public void updateRecipe(UUID id, RecipeRequestDto recipeRequestDto,boolean isSelf) {
         Recipe recipe= recipeMapper.toRecipe(recipeRequestDto);
         cleanOptionalFields(recipe);
 
         Recipe recoveredRecipe= findRecipeById(id);
+        //validate current recipe is one of my recipes
+        if(isSelf)
+            validateRecipeIsMine(recoveredRecipe.getId());
+
         recoveredRecipe.getIngredients().clear();
 
         List<Ingredient> ingredients= recipe.getIngredients();
@@ -118,6 +127,21 @@ public class RecipeServiceImp implements RecipeService{
         BeanUtils.copyProperties(recipe,recoveredRecipe,"id","user","ingredients");
         //recipeRepository.save(recoveredRecipe);
     }
+
+    private void validateRecipeIsMine(UUID recipeId) {
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null /*|| !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails)*/) {
+            System.out.println("FIRST EXC-------------->");
+            throw new AccessDeniedException("Unauthorized access");
+        }
+        String username= authentication.getName();
+        System.out.println("username: "+username);
+        if(recipeRepository.existsByIdAndUserUsernameNot(recipeId,username)){
+            System.out.println("SECOND EXC-------------->");
+            throw new AccessDeniedException("Recipe does not belong to the current user");
+        }
+    }
+
 
     @Override
     @Transactional
