@@ -4,11 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -17,9 +21,15 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
+    //private final CustomAccessDeniedHandler customAccessDeniedHandler;
+
     @Autowired
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter , CustomAuthenticationEntryPoint customAuthenticationEntryPoint /*, CustomAccessDeniedHandler customAccessDeniedHandler*/) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
+        /*this.customAccessDeniedHandler = customAccessDeniedHandler;*/
     }
 
     @Bean
@@ -59,6 +69,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT,"/api/v1/ingredients/*").authenticated()
                         .requestMatchers(HttpMethod.DELETE,"/api/v1/ingredients/*").authenticated()
                         .anyRequest().denyAll())
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(customAuthenticationEntryPoint))
+                /*.exceptionHandling(e-> e
+                        .accessDeniedHandler(customAccessDeniedHandler) //Handles 403 Forbidden
+                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))//Handles 401 Unauthorized*/
                 .addFilterBefore(jwtAuthenticationFilter,UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
