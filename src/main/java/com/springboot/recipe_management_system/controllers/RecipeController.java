@@ -26,34 +26,54 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @GetMapping("/recipes")
-    public ResponseEntity<Page<RecipeResponseDto>> getAllRecipes(@PageableDefault(size = 15) Pageable pageable){
-        return ResponseEntity.ok(recipeService.getAllRecipes(pageable));
-    }
 
     @GetMapping("/recipes/{id}")
     public ResponseEntity<RecipeResponseDto> getRecipeById(@PathVariable UUID id){
         return ResponseEntity.ok(recipeService.getRecipeById(id));
     }
 
+    /*
+
+    @GetMapping("/recipes/search")
+    public ResponseEntity<Page<RecipeResponseDto>> getAllRecipes(@PageableDefault(size = 15) Pageable pageable){
+        return ResponseEntity.ok(recipeService.getAllRecipes(pageable));
+    }
+
     @GetMapping("/by-username-exact-match/{username}/recipes")
     public ResponseEntity<List<RecipeResponseDto>> getRecipesByUsername(@PathVariable String username){
         return ResponseEntity.ok(recipeService.getRecipesByUsername(username));
     }
-
     @GetMapping("/by-username-partial-match/{username}/recipes")
     public ResponseEntity<List<RecipeResponseDto>> getRecipesByUsernameContaining(@PathVariable String username){
         return ResponseEntity.ok(recipeService.getRecipesByUsernameContaining(username));
     }
-
     @GetMapping("/recipes/by-title-exact-match/{title}")
     public ResponseEntity<List<RecipeResponseDto>> getRecipesByTitle(@PathVariable String title){
         return ResponseEntity.ok(recipeService.getRecipesByTitle(title));
     }
-
     @GetMapping("/recipes/by-title-partial-match/{title}")
     public ResponseEntity<List<RecipeResponseDto>> getRecipesByTitleContaining(@PathVariable String title){
         return ResponseEntity.ok(recipeService.getRecipesByTitleContaining(title));
+    }
+    */
+
+    @GetMapping("/recipes")
+    public ResponseEntity<List<RecipeResponseDto>> getRecipes(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String titleContains,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String usernameContains) {
+
+        if (title != null)
+            return ResponseEntity.ok(recipeService.getRecipesByTitle(title));
+        if (titleContains != null)
+            return ResponseEntity.ok(recipeService.getRecipesByTitleContaining(titleContains));
+        if (username != null)
+            return ResponseEntity.ok(recipeService.getRecipesByUsername(username));
+        if (usernameContains != null)
+            return ResponseEntity.ok(recipeService.getRecipesByUsernameContaining(usernameContains));
+
+        return ResponseEntity.ok(recipeService.getAllRecipes());
     }
 
     @PostMapping("/users/{userId}/recipes")
@@ -75,8 +95,5 @@ public class RecipeController {
         recipeService.deleteRecipe(id);
         return ResponseEntity.ok("Recipe with id: "+id+" deleted successfully!");
     }
-
-    //TO DO:
-    // POSTMAN AND SECURITY --
 
 }

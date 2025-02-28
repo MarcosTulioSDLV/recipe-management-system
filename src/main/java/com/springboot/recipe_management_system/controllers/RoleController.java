@@ -2,7 +2,6 @@ package com.springboot.recipe_management_system.controllers;
 
 import com.springboot.recipe_management_system.dtos.RoleResponseDto;
 import com.springboot.recipe_management_system.services.RoleService;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -36,8 +36,8 @@ public class RecipeServiceImp implements RecipeService{
     }
 
     @Override
-    public Page<RecipeResponseDto> getAllRecipes(Pageable pageable) {
-        return recipeRepository.findAll(pageable).map(recipeMapper::toRecipeResponseDto);
+    public List<RecipeResponseDto> getAllRecipes() {
+        return recipeRepository.findAll().stream().map(recipeMapper::toRecipeResponseDto).toList();
     }
 
     @Override

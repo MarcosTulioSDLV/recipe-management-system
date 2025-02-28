@@ -14,7 +14,7 @@ import java.util.UUID;
 @Service
 public interface RecipeService {
 
-    Page<RecipeResponseDto> getAllRecipes(Pageable pageable);
+    List<RecipeResponseDto> getAllRecipes();
 
     RecipeResponseDto getRecipeById(UUID id);
 

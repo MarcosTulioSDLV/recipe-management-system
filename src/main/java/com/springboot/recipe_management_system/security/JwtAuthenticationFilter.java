@@ -13,6 +13,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -43,8 +44,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             DecodedJWT decodedJWT= jwtUtils.validateToken(jwtToken);
             String username= jwtUtils.extractUsername(decodedJWT);
 
+            //Method 1 (recovering info from the db)
             UserDetails userDetails= userDetailsService.loadUserByUsername(username);
             List<? extends GrantedAuthority> authorities= new ArrayList<>(userDetails.getAuthorities());
+
+            //Method 2 (recovering info from the token)
+            /*String authorityString= jwtUtils.extractSpecificClaim(decodedJWT,"authorities").asString();
+            List<GrantedAuthority> authorities= AuthorityUtils.commaSeparatedStringToAuthorityList(authorityString);*/
 
             Authentication authentication= new UsernamePasswordAuthenticationToken(username,null,authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
