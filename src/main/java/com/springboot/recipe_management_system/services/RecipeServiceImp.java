@@ -9,12 +9,14 @@ import com.springboot.recipe_management_system.models.Ingredient;
 import com.springboot.recipe_management_system.models.Recipe;
 import com.springboot.recipe_management_system.models.UserEntity;
 import com.springboot.recipe_management_system.repositories.RecipeRepository;
+import com.springboot.recipe_management_system.security.CustomUserDetails;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -84,10 +86,16 @@ public class RecipeServiceImp implements RecipeService{
 
     @Override
     @Transactional
-    public void addRecipe(UUID userId, RecipeRequestDto recipeRequestDto) {
-        UserEntity user= userService.findUserById(userId);
+    public void addRecipeForSelf(RecipeRequestDto recipeRequestDto) {
+        addRecipe(null, recipeRequestDto);
+    }
 
-        Recipe recipe= recipeMapper.toRecipe(recipeRequestDto);
+    @Override
+    @Transactional
+    public void addRecipe(UUID userId, RecipeRequestDto recipeRequestDto) {
+        UserEntity user = (userId == null) ? getCurrentLoggedUser() : userService.findUserById(userId);
+
+        Recipe recipe = recipeMapper.toRecipe(recipeRequestDto);
         cleanOptionalFields(recipe);
 
         recipe.setUser(user);
@@ -127,14 +135,15 @@ public class RecipeServiceImp implements RecipeService{
     }
 
     private void validateRecipeIsMine(Recipe recipe) {
-        String currentLoggedUsername = getCurrentLoggedUsername();
-        System.out.println("username: "+currentLoggedUsername);
+        UserEntity currentLoggedUser= getCurrentLoggedUser();
+        String currentLoggedUsername= currentLoggedUser.getUsername();
+        //System.out.println("username: "+currentLoggedUsername);
         if(!recipe.getUser().getUsername().equals(currentLoggedUsername)){
             throw new RecipeOwnershipException("Recipe does not belong to the current user!");
         }
     }
 
-    private String getCurrentLoggedUsername() {
+    private UserEntity getCurrentLoggedUser(){
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         /*if(authentication!=null){
             System.out.println("Authentication class: " + authentication.getClass().getName());
@@ -142,11 +151,15 @@ public class RecipeServiceImp implements RecipeService{
             System.out.println("Is Not Authenticated: "+!authentication.isAuthenticated());
             System.out.println("Is Not UserDetails: "+!(authentication.getPrincipal() instanceof UserDetails));
         }*/
-        if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails)) {
+        if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails userDetails)) {
             System.out.println("Unauthorized access!");
             throw new AccessDeniedException("Unauthorized access!");
         }
-        return authentication.getName();
+        if(!(userDetails instanceof CustomUserDetails customUserDetails)){
+            System.out.println("UserDetails is not an instance of CustomUserDetails!");
+            throw new ClassCastException("UserDetails is not an instance of CustomUserDetails!");
+        }
+        return customUserDetails.getUser();
     }
 
     @Override

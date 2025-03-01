@@ -11,15 +11,15 @@ import java.util.stream.Collectors;
 
 public class CustomUserDetails implements UserDetails {
 
-    private final UserEntity userEntity;
+    private final UserEntity user;
 
     public CustomUserDetails(UserEntity userEntity) {
-        this.userEntity = userEntity;
+        this.user = userEntity;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<? extends GrantedAuthority> authorities= userEntity.getRoles().stream()
+        List<? extends GrantedAuthority> authorities= user.getRoles().stream()
                 .map(r->new SimpleGrantedAuthority("ROLE_"+r.getRole().toString()))
                 .collect(Collectors.toList());
         return authorities;
@@ -34,14 +34,18 @@ public class CustomUserDetails implements UserDetails {
         return authorities;
     }*/
 
+    public UserEntity getUser(){
+        return user;
+    }
+
     @Override
     public String getUsername() {
-        return userEntity.getUsername();
+        return user.getUsername();
     }
 
     @Override
     public String getPassword() {
-        return userEntity.getPassword();
+        return user.getPassword();
     }
 
     @Override

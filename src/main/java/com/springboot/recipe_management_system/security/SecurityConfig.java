@@ -60,9 +60,10 @@ public class SecurityConfig {
                         //.requestMatchers(HttpMethod.GET,"/api/v1/by-username-partial-match/*/recipes").authenticated()
                         //.requestMatchers(HttpMethod.GET,"/api/v1/recipes/by-title-exact-match/*").authenticated()
                         //.requestMatchers(HttpMethod.GET,"/api/v1/recipes/by-title-partial-match/*").authenticated()
-                        .requestMatchers(HttpMethod.POST,"/api/v1/users/*/recipes").authenticated()
+                        .requestMatchers(HttpMethod.POST,"/api/v1/users/self/recipes").authenticated()
+                        .requestMatchers(HttpMethod.POST,"/api/v1/users/*/recipes").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,"/api/v1/recipes/self/*").authenticated()
-                        .requestMatchers(HttpMethod.PUT,"/api/v1/recipes/*").authenticated()
+                        .requestMatchers(HttpMethod.PUT,"/api/v1/recipes/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/api/v1/recipes/*").authenticated()
                         //Ingredient
                         .requestMatchers(HttpMethod.GET,"/api/v1/ingredients").authenticated()

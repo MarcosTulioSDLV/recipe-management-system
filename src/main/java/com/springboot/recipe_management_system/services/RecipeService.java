@@ -29,6 +29,9 @@ public interface RecipeService {
     List<RecipeResponseDto> getRecipesByTitleContaining(String title);
 
     @Transactional
+    void addRecipeForSelf(RecipeRequestDto recipeRequestDto);
+
+    @Transactional
     void addRecipe(UUID userId, RecipeRequestDto recipeRequestDto);
 
     @Transactional
@@ -36,5 +39,6 @@ public interface RecipeService {
 
     @Transactional
     void deleteRecipe(UUID id);
+
 
 }

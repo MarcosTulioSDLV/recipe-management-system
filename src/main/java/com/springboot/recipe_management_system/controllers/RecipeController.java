@@ -75,6 +75,12 @@ public class RecipeController {
         return ResponseEntity.ok(recipeService.getAllRecipes());
     }
 
+    @PostMapping("/users/self/recipes")
+    public ResponseEntity<String> addRecipeForSelf(@RequestBody @Valid RecipeRequestDto recipeRequestDto){
+        recipeService.addRecipeForSelf(recipeRequestDto);
+        return new ResponseEntity<>("Recipe created successfully!",HttpStatus.CREATED);
+    }
+
     @PostMapping("/users/{userId}/recipes")
     public ResponseEntity<String> addRecipe(@PathVariable UUID userId,
                                             @RequestBody @Valid RecipeRequestDto recipeRequestDto){
@@ -82,14 +88,12 @@ public class RecipeController {
         return new ResponseEntity<>("Recipe created successfully!",HttpStatus.CREATED);
     }
 
-    //TESTING
     @PutMapping("/recipes/self/{id}")
     public ResponseEntity<String> updateRecipeForSelf(@PathVariable UUID id,
                                                       @RequestBody @Valid RecipeRequestDto recipeRequestDto){
         recipeService.updateRecipe(id,recipeRequestDto,true);
         return ResponseEntity.ok("Recipe updated successfully!");
     }
-    //
 
     @PutMapping("/recipes/{id}")
     public ResponseEntity<String> updateRecipe(@PathVariable UUID id,
