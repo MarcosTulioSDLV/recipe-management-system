@@ -1,7 +1,6 @@
 package com.springboot.recipe_management_system.infra;
 
 import com.springboot.recipe_management_system.exceptions.*;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -48,6 +47,12 @@ public class RestExceptionHandler {
     public ResponseEntity<Object> handleRecipeNotFoundException(RecipeNotFoundException e){
         return handleCustomException(e,HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(RecipeOwnershipException.class)
+    public ResponseEntity<Object> handleRecipeOwnershipException(RecipeOwnershipException e){
+        return handleCustomException(e,HttpStatus.FORBIDDEN);
+    }
+
     //-----
     // Ingredient
 

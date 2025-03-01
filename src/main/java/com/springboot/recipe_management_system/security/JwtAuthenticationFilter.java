@@ -52,7 +52,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             /*String authorityString= jwtUtils.extractSpecificClaim(decodedJWT,"authorities").asString();
             List<GrantedAuthority> authorities= AuthorityUtils.commaSeparatedStringToAuthorityList(authorityString);*/
 
-            Authentication authentication= new UsernamePasswordAuthenticationToken(username,null,authorities);
+            Authentication authentication= new UsernamePasswordAuthenticationToken(userDetails,null,authorities);
+            //Authentication authentication= new UsernamePasswordAuthenticationToken(username,null,authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request,response);

@@ -3,6 +3,7 @@ package com.springboot.recipe_management_system.services;
 import com.springboot.recipe_management_system.dtos.RecipeRequestDto;
 import com.springboot.recipe_management_system.dtos.RecipeResponseDto;
 import com.springboot.recipe_management_system.exceptions.RecipeNotFoundException;
+import com.springboot.recipe_management_system.exceptions.RecipeOwnershipException;
 import com.springboot.recipe_management_system.mappers.RecipeMapper;
 import com.springboot.recipe_management_system.models.Ingredient;
 import com.springboot.recipe_management_system.models.Recipe;
@@ -11,12 +12,9 @@ import com.springboot.recipe_management_system.repositories.RecipeRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -109,14 +107,14 @@ public class RecipeServiceImp implements RecipeService{
 
     @Override
     @Transactional
-    public void updateRecipe(UUID id, RecipeRequestDto recipeRequestDto,boolean isSelf) {
+    public void updateRecipe(UUID id, RecipeRequestDto recipeRequestDto, boolean isSelf) {
         Recipe recipe= recipeMapper.toRecipe(recipeRequestDto);
         cleanOptionalFields(recipe);
 
         Recipe recoveredRecipe= findRecipeById(id);
         //validate current recipe is one of my recipes
         if(isSelf)
-            validateRecipeIsMine(recoveredRecipe.getId());
+            validateRecipeIsMine(recoveredRecipe);
 
         recoveredRecipe.getIngredients().clear();
 
@@ -128,20 +126,28 @@ public class RecipeServiceImp implements RecipeService{
         //recipeRepository.save(recoveredRecipe);
     }
 
-    private void validateRecipeIsMine(UUID recipeId) {
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null /*|| !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails)*/) {
-            System.out.println("FIRST EXC-------------->");
-            throw new AccessDeniedException("Unauthorized access");
-        }
-        String username= authentication.getName();
-        System.out.println("username: "+username);
-        if(recipeRepository.existsByIdAndUserUsernameNot(recipeId,username)){
-            System.out.println("SECOND EXC-------------->");
-            throw new AccessDeniedException("Recipe does not belong to the current user");
+    private void validateRecipeIsMine(Recipe recipe) {
+        String currentLoggedUsername = getCurrentLoggedUsername();
+        System.out.println("username: "+currentLoggedUsername);
+        if(!recipe.getUser().getUsername().equals(currentLoggedUsername)){
+            throw new RecipeOwnershipException("Recipe does not belong to the current user!");
         }
     }
 
+    private String getCurrentLoggedUsername() {
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        /*if(authentication!=null){
+            System.out.println("Authentication class: " + authentication.getClass().getName());
+            System.out.println("Authorities: " + authentication.getAuthorities());
+            System.out.println("Is Not Authenticated: "+!authentication.isAuthenticated());
+            System.out.println("Is Not UserDetails: "+!(authentication.getPrincipal() instanceof UserDetails));
+        }*/
+        if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails)) {
+            System.out.println("Unauthorized access!");
+            throw new AccessDeniedException("Unauthorized access!");
+        }
+        return authentication.getName();
+    }
 
     @Override
     @Transactional

@@ -27,7 +27,4 @@ public interface RecipeRepository extends JpaRepository<Recipe,UUID> {
     /*@Query(value = "SELECT r FROM Recipe r WHERE LOWER(r.title) LIKE CONCAT('%',LOWER(:title),'%')")
     List<Recipe> findByTitleIgnoreCaseContainingCustom(String title);*/
 
-
-    boolean existsByIdAndUserUsernameNot(UUID recipeId, String username);
-
 }
