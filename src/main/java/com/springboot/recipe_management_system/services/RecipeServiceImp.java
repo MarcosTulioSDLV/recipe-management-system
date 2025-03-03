@@ -45,8 +45,19 @@ public class RecipeServiceImp implements RecipeService{
     }
 
     @Override
-    public RecipeResponseDto getRecipeById(UUID id) {
+    public List<RecipeResponseDto> getAllRecipesForSelf() {
+        UserEntity currentLoggedUser= getCurrentLoggedUser();
+        return recipeRepository.findAllByUser(currentLoggedUser).stream()
+                .map(recipeMapper::toRecipeResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public RecipeResponseDto getRecipeById(UUID id,boolean isSelf) {
         Recipe recipe= findRecipeById(id);
+        if(isSelf){
+            validateRecipeOwnership(recipe);
+        }
         return recipeMapper.toRecipeResponseDto(recipe);
     }
 
@@ -77,8 +88,26 @@ public class RecipeServiceImp implements RecipeService{
     }
 
     @Override
+    public List<RecipeResponseDto> getRecipesByTitleForSelf(String title) {
+        UserEntity currentLoggedUser= getCurrentLoggedUser();
+        return recipeRepository.findByTitleIgnoreCaseAndUser(title,currentLoggedUser)
+                .stream()
+                .map(recipeMapper::toRecipeResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<RecipeResponseDto> getRecipesByTitleContaining(String title) {
         return recipeRepository.findByTitleIgnoreCaseContaining(title).stream()
+                .map(recipeMapper::toRecipeResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<RecipeResponseDto> getRecipesByTitleContainingForSelf(String title) {
+        UserEntity currentLoggedUser= getCurrentLoggedUser();
+        return recipeRepository.findByTitleIgnoreCaseContainingAndUser(title,currentLoggedUser)
+                .stream()
                 .map(recipeMapper::toRecipeResponseDto)
                 .collect(Collectors.toList());
     }

@@ -26,9 +26,15 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
+
+    @GetMapping("/recipes/self/{id}")
+    public ResponseEntity<RecipeResponseDto> getRecipeByIdForSelf(@PathVariable UUID id){
+        return ResponseEntity.ok(recipeService.getRecipeById(id,true));
+    }
+
     @GetMapping("/recipes/{id}")
     public ResponseEntity<RecipeResponseDto> getRecipeById(@PathVariable UUID id){
-        return ResponseEntity.ok(recipeService.getRecipeById(id));
+        return ResponseEntity.ok(recipeService.getRecipeById(id,false));
     }
 
     /*
@@ -55,6 +61,19 @@ public class RecipeController {
         return ResponseEntity.ok(recipeService.getRecipesByTitleContaining(title));
     }
     */
+
+    @GetMapping("/recipes/self")
+    public ResponseEntity<List<RecipeResponseDto>> getRecipesForSelf(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String titleContains) {
+
+        if (title != null)
+            return ResponseEntity.ok(recipeService.getRecipesByTitleForSelf(title));
+        if (titleContains != null)
+            return ResponseEntity.ok(recipeService.getRecipesByTitleContainingForSelf(titleContains));
+
+        return ResponseEntity.ok(recipeService.getAllRecipesForSelf());
+    }
 
     @GetMapping("/recipes")
     public ResponseEntity<List<RecipeResponseDto>> getRecipes(

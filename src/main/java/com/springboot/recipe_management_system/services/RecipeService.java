@@ -16,7 +16,9 @@ public interface RecipeService {
 
     List<RecipeResponseDto> getAllRecipes();
 
-    RecipeResponseDto getRecipeById(UUID id);
+    List<RecipeResponseDto> getAllRecipesForSelf();
+
+    RecipeResponseDto getRecipeById(UUID id,boolean isSelf);
 
     Recipe findRecipeById(UUID id);
 
@@ -24,9 +26,13 @@ public interface RecipeService {
 
     List<RecipeResponseDto> getRecipesByUsernameContaining(String username);
 
+    List<RecipeResponseDto> getRecipesByTitleForSelf(String title);
+
     List<RecipeResponseDto> getRecipesByTitle(String title);
 
     List<RecipeResponseDto> getRecipesByTitleContaining(String title);
+
+    List<RecipeResponseDto> getRecipesByTitleContainingForSelf(String title);
 
     @Transactional
     void addRecipeForSelf(RecipeRequestDto recipeRequestDto);
@@ -39,5 +45,6 @@ public interface RecipeService {
 
     @Transactional
     void deleteRecipe(UUID id, boolean isSelf);
+
 
 }
