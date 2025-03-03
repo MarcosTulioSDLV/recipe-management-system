@@ -26,32 +26,58 @@ public class IngredientController {
     }
 
     @GetMapping("/ingredients")
-    public ResponseEntity<Page<IngredientResponseDto>> getAllIngredients(@PageableDefault(size = 15) Pageable pageable){
+    public ResponseEntity<Page<IngredientResponseDto>> getAllIngredients(@PageableDefault(size = 15) Pageable pageable) {
         return ResponseEntity.ok(ingredientService.getAllIngredients(pageable));
     }
 
     @GetMapping("/ingredients/{id}")
-    public ResponseEntity<IngredientResponseDto> getIngredientById(@PathVariable UUID id){
+    public ResponseEntity<IngredientResponseDto> getIngredientById(@PathVariable UUID id) {
         return ResponseEntity.ok(ingredientService.getIngredientById(id));
     }
 
-    @PostMapping("/recipes/{recipeId}/ingredients")
-    public ResponseEntity<String> addIngredient(@PathVariable UUID recipeId,
-                                                @RequestBody @Valid IngredientRequestDto ingredientRequestDto){
-        ingredientService.addIngredient(recipeId,ingredientRequestDto);
+    //Testing
+    @PostMapping("/recipes/self/{recipeId}/ingredients")
+    public ResponseEntity<String> addIngredientForSelf(@PathVariable UUID recipeId,
+                                                       @RequestBody @Valid IngredientRequestDto ingredientRequestDto) {
+        ingredientService.addIngredient(recipeId, ingredientRequestDto, true);
         return new ResponseEntity<>("Ingredient updated successfully!", HttpStatus.CREATED);
     }
+    //---
+
+    @PostMapping("/recipes/{recipeId}/ingredients")
+    public ResponseEntity<String> addIngredient(@PathVariable UUID recipeId,
+                                                @RequestBody @Valid IngredientRequestDto ingredientRequestDto) {
+        ingredientService.addIngredient(recipeId, ingredientRequestDto, false);
+        return new ResponseEntity<>("Ingredient updated successfully!", HttpStatus.CREATED);
+    }
+
+    //Testing
+    @PutMapping("/ingredients/self/{id}")
+    public ResponseEntity<String> updateIngredientForSelf(@PathVariable UUID id,
+                                                   @RequestBody @Valid IngredientRequestDto ingredientRequestDto){
+        ingredientService.updateIngredient(id,ingredientRequestDto,true);
+        return ResponseEntity.ok("Ingredient updated successfully!");
+    }
+    //---
 
     @PutMapping("/ingredients/{id}")
     public ResponseEntity<String> updateIngredient(@PathVariable UUID id,
                                                    @RequestBody @Valid IngredientRequestDto ingredientRequestDto){
-        ingredientService.updateIngredient(id,ingredientRequestDto);
+        ingredientService.updateIngredient(id,ingredientRequestDto,false);
         return ResponseEntity.ok("Ingredient updated successfully!");
     }
 
+    //Testing
+    @DeleteMapping("/ingredients/self/{id}")
+    public ResponseEntity<String> deleteIngredientForSelf(@PathVariable UUID id){
+        ingredientService.deleteIngredient(id,true);
+        return ResponseEntity.ok("Ingredient with id:"+id+" removed successfully!");
+    }
+    //---
+
     @DeleteMapping("/ingredients/{id}")
     public ResponseEntity<String> deleteIngredient(@PathVariable UUID id){
-        ingredientService.deleteIngredient(id);
+        ingredientService.deleteIngredient(id, false);
         return ResponseEntity.ok("Ingredient with id:"+id+" removed successfully!");
     }
 

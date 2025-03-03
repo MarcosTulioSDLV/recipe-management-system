@@ -38,7 +38,6 @@ public interface RecipeService {
     void updateRecipe(UUID id, RecipeRequestDto recipeRequestDto, boolean isSelf);
 
     @Transactional
-    void deleteRecipe(UUID id);
-
+    void deleteRecipe(UUID id, boolean isSelf);
 
 }

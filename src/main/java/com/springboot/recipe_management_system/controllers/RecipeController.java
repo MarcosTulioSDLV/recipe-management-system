@@ -102,9 +102,17 @@ public class RecipeController {
         return ResponseEntity.ok("Recipe updated successfully!");
     }
 
+    //TESTING
+    @DeleteMapping("/recipes/self/{id}")
+    public ResponseEntity<String> deleteRecipeForSelf(@PathVariable UUID id){
+        recipeService.deleteRecipe(id, true);
+        return ResponseEntity.ok("Recipe with id: "+id+" deleted successfully!");
+    }
+    //---
+
     @DeleteMapping("/recipes/{id}")
     public ResponseEntity<String> deleteRecipe(@PathVariable UUID id){
-        recipeService.deleteRecipe(id);
+        recipeService.deleteRecipe(id,false);
         return ResponseEntity.ok("Recipe with id: "+id+" deleted successfully!");
     }
 

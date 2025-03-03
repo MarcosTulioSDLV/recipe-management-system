@@ -2,8 +2,8 @@ package com.springboot.recipe_management_system.services;
 
 import com.springboot.recipe_management_system.dtos.RecipeRequestDto;
 import com.springboot.recipe_management_system.dtos.RecipeResponseDto;
+import com.springboot.recipe_management_system.exceptions.OwnershipException;
 import com.springboot.recipe_management_system.exceptions.RecipeNotFoundException;
-import com.springboot.recipe_management_system.exceptions.RecipeOwnershipException;
 import com.springboot.recipe_management_system.mappers.RecipeMapper;
 import com.springboot.recipe_management_system.models.Ingredient;
 import com.springboot.recipe_management_system.models.Recipe;
@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -120,10 +119,9 @@ public class RecipeServiceImp implements RecipeService{
         cleanOptionalFields(recipe);
 
         Recipe recoveredRecipe= findRecipeById(id);
-        //validate current recipe is one of my recipes
-        if(isSelf)
-            validateRecipeIsMine(recoveredRecipe);
-
+        if(isSelf) {
+            validateRecipeOwnership(recoveredRecipe);
+        }
         recoveredRecipe.getIngredients().clear();
 
         List<Ingredient> ingredients= recipe.getIngredients();
@@ -134,13 +132,11 @@ public class RecipeServiceImp implements RecipeService{
         //recipeRepository.save(recoveredRecipe);
     }
 
-    private void validateRecipeIsMine(Recipe recipe) {
-        UserEntity currentLoggedUser= getCurrentLoggedUser();
-        String currentLoggedUsername= currentLoggedUser.getUsername();
-        //System.out.println("username: "+currentLoggedUsername);
-        if(!recipe.getUser().getUsername().equals(currentLoggedUsername)){
-            throw new RecipeOwnershipException("Recipe does not belong to the current user!");
-        }
+    //Note: Validate if the recipe belongs to the current logged-in user
+    private void validateRecipeOwnership(Recipe recipe) {
+        String currentLoggedUsername= getCurrentLoggedUser().getUsername();
+        if(!recipe.getUser().getUsername().equals(currentLoggedUsername))
+            throw new OwnershipException("Recipe does not belong to the current user!");
     }
 
     private UserEntity getCurrentLoggedUser(){
@@ -164,8 +160,11 @@ public class RecipeServiceImp implements RecipeService{
 
     @Override
     @Transactional
-    public void deleteRecipe(UUID id) {
+    public void deleteRecipe(UUID id, boolean isSelf) {
         Recipe recipe= findRecipeById(id);
+        if(isSelf){
+            validateRecipeOwnership(recipe);
+        }
         recipeRepository.delete(recipe);
     }
 

@@ -48,8 +48,8 @@ public class RestExceptionHandler {
         return handleCustomException(e,HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(RecipeOwnershipException.class)
-    public ResponseEntity<Object> handleRecipeOwnershipException(RecipeOwnershipException e){
+    @ExceptionHandler(OwnershipException.class)
+    public ResponseEntity<Object> handleOwnershipException(OwnershipException e){
         return handleCustomException(e,HttpStatus.FORBIDDEN);
     }
 

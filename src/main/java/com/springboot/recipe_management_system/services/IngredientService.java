@@ -17,12 +17,12 @@ public interface IngredientService {
     IngredientResponseDto getIngredientById(UUID id);
 
     @Transactional
-    void addIngredient(UUID recipeId, IngredientRequestDto ingredientRequestDto);
+    void addIngredient(UUID recipeId, IngredientRequestDto ingredientRequestDto, boolean isSelf);
 
     @Transactional
-    void updateIngredient(UUID id, IngredientRequestDto ingredientRequestDto);
+    void updateIngredient(UUID id, IngredientRequestDto ingredientRequestDto, boolean isSelf);
 
     @Transactional
-    void deleteIngredient(UUID id);
+    void deleteIngredient(UUID id, boolean isSelf);
 
 }
