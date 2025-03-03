@@ -35,14 +35,12 @@ public class IngredientController {
         return ResponseEntity.ok(ingredientService.getIngredientById(id));
     }
 
-    //Testing
     @PostMapping("/recipes/self/{recipeId}/ingredients")
     public ResponseEntity<String> addIngredientForSelf(@PathVariable UUID recipeId,
                                                        @RequestBody @Valid IngredientRequestDto ingredientRequestDto) {
         ingredientService.addIngredient(recipeId, ingredientRequestDto, true);
         return new ResponseEntity<>("Ingredient updated successfully!", HttpStatus.CREATED);
     }
-    //---
 
     @PostMapping("/recipes/{recipeId}/ingredients")
     public ResponseEntity<String> addIngredient(@PathVariable UUID recipeId,
@@ -51,14 +49,12 @@ public class IngredientController {
         return new ResponseEntity<>("Ingredient updated successfully!", HttpStatus.CREATED);
     }
 
-    //Testing
     @PutMapping("/ingredients/self/{id}")
     public ResponseEntity<String> updateIngredientForSelf(@PathVariable UUID id,
                                                    @RequestBody @Valid IngredientRequestDto ingredientRequestDto){
         ingredientService.updateIngredient(id,ingredientRequestDto,true);
         return ResponseEntity.ok("Ingredient updated successfully!");
     }
-    //---
 
     @PutMapping("/ingredients/{id}")
     public ResponseEntity<String> updateIngredient(@PathVariable UUID id,
@@ -67,13 +63,11 @@ public class IngredientController {
         return ResponseEntity.ok("Ingredient updated successfully!");
     }
 
-    //Testing
     @DeleteMapping("/ingredients/self/{id}")
     public ResponseEntity<String> deleteIngredientForSelf(@PathVariable UUID id){
         ingredientService.deleteIngredient(id,true);
         return ResponseEntity.ok("Ingredient with id:"+id+" removed successfully!");
     }
-    //---
 
     @DeleteMapping("/ingredients/{id}")
     public ResponseEntity<String> deleteIngredient(@PathVariable UUID id){

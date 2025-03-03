@@ -53,7 +53,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT,"/api/v1/auth/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/api/v1/auth/*").hasRole("ADMIN")
                         //Recipe
-                        //.requestMatchers(HttpMethod.GET,"/api/v1/recipes/search").authenticated()
                         .requestMatchers(HttpMethod.GET,"/api/v1/recipes/*").authenticated()
                         .requestMatchers(HttpMethod.GET,"/api/v1/recipes").authenticated()
                         //.requestMatchers(HttpMethod.GET,"/api/v1/by-username-exact-match/*/recipes").authenticated()
@@ -69,7 +68,6 @@ public class SecurityConfig {
                         //Ingredient
                         .requestMatchers(HttpMethod.GET,"/api/v1/ingredients").authenticated()
                         .requestMatchers(HttpMethod.GET,"/api/v1/ingredients/*").authenticated()
-                        ///recipes/self/{recipeId}/ingredients
                         .requestMatchers(HttpMethod.POST,"/api/v1/recipes/self/*/ingredients").authenticated()
                         .requestMatchers(HttpMethod.POST,"/api/v1/recipes/*/ingredients").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,"/api/v1/ingredients/self/*").authenticated()
