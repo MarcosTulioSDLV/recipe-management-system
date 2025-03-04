@@ -40,18 +40,28 @@ public class IngredientServiceImp implements IngredientService{
     }
 
     @Override
-    public Page<IngredientResponseDto> getAllIngredients(Pageable pageable) {
-        return ingredientRepository.findAll(pageable).map(ingredientMapper::toIngredientResponseDto);
-    }
-
-    @Override
-    public IngredientResponseDto getIngredientById(UUID id) {
+    public IngredientResponseDto getIngredientById(UUID id,boolean isSelf) {
         Ingredient ingredient= findIngredientById(id);
+        if(isSelf){
+            validateIngredientOwnership(ingredient);
+        }
         return ingredientMapper.toIngredientResponseDto(ingredient);
     }
 
     private Ingredient findIngredientById(UUID id) {
         return ingredientRepository.findById(id).orElseThrow(() -> new IngredientNotFoundException("Ingredient with id: " + id + " not found!"));
+    }
+
+    @Override
+    public Page<IngredientResponseDto> getAllIngredients(Pageable pageable) {
+        return ingredientRepository.findAll(pageable).map(ingredientMapper::toIngredientResponseDto);
+    }
+
+    @Override
+    public Page<IngredientResponseDto> getAllIngredientsForSelf(Pageable pageable) {
+        UserEntity currentLoggedUser= getCurrentLoggedUser();
+        return ingredientRepository.findAllByRecipe_User(currentLoggedUser,pageable)
+                .map(ingredientMapper::toIngredientResponseDto);
     }
 
     @Override
@@ -64,6 +74,10 @@ public class IngredientServiceImp implements IngredientService{
         Ingredient ingredient= ingredientMapper.toIngredient(ingredientRequestDto);
         ingredient.setRecipe(recipe);
         ingredientRepository.save(ingredient);
+    }
+
+    private void validateIngredientOwnership(Ingredient ingredient) {
+        validateOwnership(ingredient.getRecipe(),"Ingredient does not belong to any recipe owned by the current user!");
     }
 
     private void validateRecipeOwnership(Recipe recipe) {
@@ -98,10 +112,6 @@ public class IngredientServiceImp implements IngredientService{
             validateIngredientOwnership(recoveredIngredient);
         }
         BeanUtils.copyProperties(ingredient,recoveredIngredient,"id","recipe");
-    }
-
-    private void validateIngredientOwnership(Ingredient ingredient) {
-        validateOwnership(ingredient.getRecipe(),"Ingredient does not belong to any recipe owned by the current user!");
     }
 
     @Override

@@ -57,10 +57,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/recipes/self").authenticated() // TESTING
                         .requestMatchers(HttpMethod.GET, "/api/v1/recipes/*").hasRole("ADMIN") // TESTING
                         .requestMatchers(HttpMethod.GET, "/api/v1/recipes").hasRole("ADMIN") // TESTING
-                        //.requestMatchers(HttpMethod.GET,"/api/v1/recipes/self/*").authenticated()//TESTING
-                        //.requestMatchers(HttpMethod.GET,"/api/v1/recipes/*").hasRole("ADMIN")//TESTING
-                        //.requestMatchers(HttpMethod.GET,"/api/v1/recipes/self").authenticated()//TESTING
-                        //.requestMatchers(HttpMethod.GET,"/api/v1/recipes").hasRole("ADMIN")//TESTING
                         .requestMatchers(HttpMethod.POST,"/api/v1/users/self/recipes").authenticated()
                         .requestMatchers(HttpMethod.POST,"/api/v1/users/*/recipes").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,"/api/v1/recipes/self/*").authenticated()
@@ -68,8 +64,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE,"/api/v1/recipes/self/*").authenticated()
                         .requestMatchers(HttpMethod.DELETE,"/api/v1/recipes/*").hasRole("ADMIN")
                         //Ingredient
-                        .requestMatchers(HttpMethod.GET,"/api/v1/ingredients").authenticated()
-                        .requestMatchers(HttpMethod.GET,"/api/v1/ingredients/*").authenticated()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/ingredients/self/*").authenticated()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/ingredients/self").authenticated()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/ingredients/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/v1/ingredients").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST,"/api/v1/recipes/self/*/ingredients").authenticated()
                         .requestMatchers(HttpMethod.POST,"/api/v1/recipes/*/ingredients").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,"/api/v1/ingredients/self/*").authenticated()

@@ -40,19 +40,6 @@ public class RecipeServiceImp implements RecipeService{
     }
 
     @Override
-    public List<RecipeResponseDto> getAllRecipes() {
-        return recipeRepository.findAll().stream().map(recipeMapper::toRecipeResponseDto).toList();
-    }
-
-    @Override
-    public List<RecipeResponseDto> getAllRecipesForSelf() {
-        UserEntity currentLoggedUser= getCurrentLoggedUser();
-        return recipeRepository.findAllByUser(currentLoggedUser).stream()
-                .map(recipeMapper::toRecipeResponseDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public RecipeResponseDto getRecipeById(UUID id,boolean isSelf) {
         Recipe recipe= findRecipeById(id);
         if(isSelf){
@@ -64,6 +51,19 @@ public class RecipeServiceImp implements RecipeService{
     @Override
     public Recipe findRecipeById(UUID id) {
         return recipeRepository.findById(id).orElseThrow(() -> new RecipeNotFoundException("Recipe with id: " + id + " not found!"));
+    }
+
+    @Override
+    public List<RecipeResponseDto> getAllRecipes() {
+        return recipeRepository.findAll().stream().map(recipeMapper::toRecipeResponseDto).toList();
+    }
+
+    @Override
+    public List<RecipeResponseDto> getAllRecipesForSelf() {
+        UserEntity currentLoggedUser= getCurrentLoggedUser();
+        return recipeRepository.findAllByUser(currentLoggedUser).stream()
+                .map(recipeMapper::toRecipeResponseDto)
+                .collect(Collectors.toList());
     }
 
     @Override

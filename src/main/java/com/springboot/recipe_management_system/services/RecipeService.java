@@ -14,13 +14,13 @@ import java.util.UUID;
 @Service
 public interface RecipeService {
 
-    List<RecipeResponseDto> getAllRecipes();
-
-    List<RecipeResponseDto> getAllRecipesForSelf();
-
     RecipeResponseDto getRecipeById(UUID id,boolean isSelf);
 
     Recipe findRecipeById(UUID id);
+
+    List<RecipeResponseDto> getAllRecipes();
+
+    List<RecipeResponseDto> getAllRecipesForSelf();
 
     List<RecipeResponseDto> getRecipesByUsername(String username);
 
@@ -45,6 +45,5 @@ public interface RecipeService {
 
     @Transactional
     void deleteRecipe(UUID id, boolean isSelf);
-
 
 }

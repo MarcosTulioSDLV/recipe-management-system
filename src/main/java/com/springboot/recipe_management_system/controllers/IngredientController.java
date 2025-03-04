@@ -25,14 +25,24 @@ public class IngredientController {
         this.ingredientService = ingredientService;
     }
 
-    @GetMapping("/ingredients")
-    public ResponseEntity<Page<IngredientResponseDto>> getAllIngredients(@PageableDefault(size = 15) Pageable pageable) {
-        return ResponseEntity.ok(ingredientService.getAllIngredients(pageable));
+    @GetMapping("/ingredients/self/{id}")
+    public ResponseEntity<IngredientResponseDto> getIngredientByIdForSelf(@PathVariable UUID id) {
+        return ResponseEntity.ok(ingredientService.getIngredientById(id,true));
     }
 
     @GetMapping("/ingredients/{id}")
     public ResponseEntity<IngredientResponseDto> getIngredientById(@PathVariable UUID id) {
-        return ResponseEntity.ok(ingredientService.getIngredientById(id));
+        return ResponseEntity.ok(ingredientService.getIngredientById(id,false));
+    }
+
+    @GetMapping("/ingredients/self")
+    public ResponseEntity<Page<IngredientResponseDto>> getAllIngredientsForSelf(@PageableDefault(size = 15) Pageable pageable) {
+        return ResponseEntity.ok(ingredientService.getAllIngredientsForSelf(pageable));
+    }
+
+    @GetMapping("/ingredients")
+    public ResponseEntity<Page<IngredientResponseDto>> getAllIngredients(@PageableDefault(size = 15) Pageable pageable) {
+        return ResponseEntity.ok(ingredientService.getAllIngredients(pageable));
     }
 
     @PostMapping("/recipes/self/{recipeId}/ingredients")

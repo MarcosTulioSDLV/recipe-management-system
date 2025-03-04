@@ -26,7 +26,6 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-
     @GetMapping("/recipes/self/{id}")
     public ResponseEntity<RecipeResponseDto> getRecipeByIdForSelf(@PathVariable UUID id){
         return ResponseEntity.ok(recipeService.getRecipeById(id,true));

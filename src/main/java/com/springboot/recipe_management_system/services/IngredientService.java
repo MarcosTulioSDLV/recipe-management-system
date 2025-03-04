@@ -12,9 +12,11 @@ import java.util.UUID;
 @Service
 public interface IngredientService {
 
+    IngredientResponseDto getIngredientById(UUID id, boolean isSelf);
+
     Page<IngredientResponseDto> getAllIngredients(Pageable pageable);
 
-    IngredientResponseDto getIngredientById(UUID id);
+    Page<IngredientResponseDto> getAllIngredientsForSelf(Pageable pageable);
 
     @Transactional
     void addIngredient(UUID recipeId, IngredientRequestDto ingredientRequestDto, boolean isSelf);
