@@ -3,6 +3,8 @@ package com.springboot.recipe_management_system.controllers;
 import com.springboot.recipe_management_system.dtos.RecipeRequestDto;
 import com.springboot.recipe_management_system.dtos.RecipeResponseDto;
 import com.springboot.recipe_management_system.services.RecipeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@Tag(name = "Recipe Controller", description = "Controller for managing recipes")
 @RestController
 @RequestMapping(value = "/api/v1")
 public class RecipeController {
@@ -26,41 +29,25 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
+    @Operation(
+            summary = "Get a recipe by id for the authenticated user",
+            description = "Retrieves a recipe by its id, ensuring it belongs to the authenticated user.")
     @GetMapping("/recipes/self/{id}")
     public ResponseEntity<RecipeResponseDto> getRecipeByIdForSelf(@PathVariable UUID id){
         return ResponseEntity.ok(recipeService.getRecipeById(id,true));
     }
 
+    @Operation(
+            summary = "Get a recipe by id",
+            description = "Retrieves a recipe by its id. Only accessible by ADMIN users.")
     @GetMapping("/recipes/{id}")
     public ResponseEntity<RecipeResponseDto> getRecipeById(@PathVariable UUID id){
         return ResponseEntity.ok(recipeService.getRecipeById(id,false));
     }
 
-    /*
-
-    @GetMapping("/recipes/search")
-    public ResponseEntity<Page<RecipeResponseDto>> getAllRecipes(@PageableDefault(size = 15) Pageable pageable){
-        return ResponseEntity.ok(recipeService.getAllRecipes(pageable));
-    }
-
-    @GetMapping("/by-username-exact-match/{username}/recipes")
-    public ResponseEntity<List<RecipeResponseDto>> getRecipesByUsername(@PathVariable String username){
-        return ResponseEntity.ok(recipeService.getRecipesByUsername(username));
-    }
-    @GetMapping("/by-username-partial-match/{username}/recipes")
-    public ResponseEntity<List<RecipeResponseDto>> getRecipesByUsernameContaining(@PathVariable String username){
-        return ResponseEntity.ok(recipeService.getRecipesByUsernameContaining(username));
-    }
-    @GetMapping("/recipes/by-title-exact-match/{title}")
-    public ResponseEntity<List<RecipeResponseDto>> getRecipesByTitle(@PathVariable String title){
-        return ResponseEntity.ok(recipeService.getRecipesByTitle(title));
-    }
-    @GetMapping("/recipes/by-title-partial-match/{title}")
-    public ResponseEntity<List<RecipeResponseDto>> getRecipesByTitleContaining(@PathVariable String title){
-        return ResponseEntity.ok(recipeService.getRecipesByTitleContaining(title));
-    }
-    */
-
+    @Operation(
+            summary = "Get all recipes for the authenticated user",
+            description = "Retrieves all recipes belonging to the authenticated user, with optional filtering by title.")
     @GetMapping("/recipes/self")
     public ResponseEntity<List<RecipeResponseDto>> getRecipesForSelf(
             @RequestParam(required = false) String title,
@@ -74,6 +61,9 @@ public class RecipeController {
         return ResponseEntity.ok(recipeService.getAllRecipesForSelf());
     }
 
+    @Operation(
+            summary = "Get all recipes",
+            description = "Retrieves all recipes with optional filtering by title and username. Only accessible by ADMIN users.")
     @GetMapping("/recipes")
     public ResponseEntity<List<RecipeResponseDto>> getRecipes(
             @RequestParam(required = false) String title,
@@ -93,12 +83,18 @@ public class RecipeController {
         return ResponseEntity.ok(recipeService.getAllRecipes());
     }
 
+    @Operation(
+            summary = "Add a recipe for the authenticated user",
+            description = "Creates a new recipe for the authenticated user.")
     @PostMapping("/users/self/recipes")
     public ResponseEntity<String> addRecipeForSelf(@RequestBody @Valid RecipeRequestDto recipeRequestDto){
         recipeService.addRecipeForSelf(recipeRequestDto);
         return new ResponseEntity<>("Recipe created successfully!",HttpStatus.CREATED);
     }
 
+    @Operation(
+            summary = "Add a new recipe for a specific user",
+            description = "Creates a new recipe for the specified user. Only accessible by ADMIN users.")
     @PostMapping("/users/{userId}/recipes")
     public ResponseEntity<String> addRecipe(@PathVariable UUID userId,
                                             @RequestBody @Valid RecipeRequestDto recipeRequestDto){
@@ -106,6 +102,9 @@ public class RecipeController {
         return new ResponseEntity<>("Recipe created successfully!",HttpStatus.CREATED);
     }
 
+    @Operation(
+            summary = "Update a recipe for the authenticated user",
+            description = "Updates an existing recipe, ensuring it belongs to the authenticated user.")
     @PutMapping("/recipes/self/{id}")
     public ResponseEntity<String> updateRecipeForSelf(@PathVariable UUID id,
                                                       @RequestBody @Valid RecipeRequestDto recipeRequestDto){
@@ -113,6 +112,9 @@ public class RecipeController {
         return ResponseEntity.ok("Recipe updated successfully!");
     }
 
+    @Operation(
+            summary = "Update a recipe",
+            description = "Updates an existing recipe by its id. Only accessible by ADMIN users.")
     @PutMapping("/recipes/{id}")
     public ResponseEntity<String> updateRecipe(@PathVariable UUID id,
                                                @RequestBody @Valid RecipeRequestDto recipeRequestDto){
@@ -120,12 +122,18 @@ public class RecipeController {
         return ResponseEntity.ok("Recipe updated successfully!");
     }
 
+    @Operation(
+            summary = "Delete a recipe for the authenticated user",
+            description = "Deletes a recipe by its id, ensuring it belongs to the authenticated user.")
     @DeleteMapping("/recipes/self/{id}")
     public ResponseEntity<String> deleteRecipeForSelf(@PathVariable UUID id){
         recipeService.deleteRecipe(id, true);
         return ResponseEntity.ok("Recipe with id: "+id+" deleted successfully!");
     }
 
+    @Operation(
+            summary = "Delete a recipe",
+            description = "Deletes a recipe by its id. Only accessible by ADMIN users.")
     @DeleteMapping("/recipes/{id}")
     public ResponseEntity<String> deleteRecipe(@PathVariable UUID id){
         recipeService.deleteRecipe(id,false);

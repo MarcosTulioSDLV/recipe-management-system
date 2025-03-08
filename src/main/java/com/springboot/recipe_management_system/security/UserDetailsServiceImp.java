@@ -26,7 +26,7 @@ public class UserDetailsServiceImp implements UserDetailsService {
         UserEntity user= userRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User with username: "+username+" not found!"));
         user.getRoles().size();//Note:This is necessary because roles are Lazy be default
         CustomUserDetails customUserDetails= new CustomUserDetails(user);
-        System.out.println("Authorities: "+customUserDetails.getAuthorities());
+        //System.out.println("Authorities: "+customUserDetails.getAuthorities());
         return customUserDetails;
     }
 
