@@ -17,6 +17,8 @@ public interface UserService {
 
     Page<UserResponseDto> getAllUsers(Pageable pageable);
 
+    UserResponseDto getUserForSelf();
+
     UserResponseDto getUserById(UUID id);
 
     UserEntity findUserById(UUID id);
@@ -27,8 +29,12 @@ public interface UserService {
     void addUser(AddUserRequestDto addUserRequestDto);
 
     @Transactional
+    void updateUserForSelf(UpdateUserRequestDto updateUserRequestDto);
+
+    @Transactional
     void updateUser(UUID id, UpdateUserRequestDto updateUserRequestDto);
 
     @Transactional
     void deleteUser(UUID id);
+
 }

@@ -39,7 +39,7 @@ public class RecipeController {
 
     @Operation(
             summary = "Get a recipe by id",
-            description = "Retrieves a recipe by its id. Only accessible by ADMIN users.")
+            description = "Retrieves a recipe by its id. Only accessible by users with ADMIN role.")
     @GetMapping("/recipes/{id}")
     public ResponseEntity<RecipeResponseDto> getRecipeById(@PathVariable UUID id){
         return ResponseEntity.ok(recipeService.getRecipeById(id,false));
@@ -63,7 +63,7 @@ public class RecipeController {
 
     @Operation(
             summary = "Get all recipes",
-            description = "Retrieves all recipes with optional filtering by title and username. Only accessible by ADMIN users.")
+            description = "Retrieves all recipes with optional filtering by title and username. Only accessible by users with ADMIN role.")
     @GetMapping("/recipes")
     public ResponseEntity<List<RecipeResponseDto>> getRecipes(
             @RequestParam(required = false) String title,
@@ -94,7 +94,7 @@ public class RecipeController {
 
     @Operation(
             summary = "Add a new recipe for a specific user",
-            description = "Creates a new recipe for the specified user. Only accessible by ADMIN users.")
+            description = "Creates a new recipe for the specified user. Only accessible by users with ADMIN role.")
     @PostMapping("/users/{userId}/recipes")
     public ResponseEntity<String> addRecipe(@PathVariable UUID userId,
                                             @RequestBody @Valid RecipeRequestDto recipeRequestDto){
@@ -114,7 +114,7 @@ public class RecipeController {
 
     @Operation(
             summary = "Update a recipe",
-            description = "Updates an existing recipe by its id. Only accessible by ADMIN users.")
+            description = "Updates an existing recipe by its id. Only accessible by users with ADMIN role.")
     @PutMapping("/recipes/{id}")
     public ResponseEntity<String> updateRecipe(@PathVariable UUID id,
                                                @RequestBody @Valid RecipeRequestDto recipeRequestDto){
@@ -133,7 +133,7 @@ public class RecipeController {
 
     @Operation(
             summary = "Delete a recipe",
-            description = "Deletes a recipe by its id. Only accessible by ADMIN users.")
+            description = "Deletes a recipe by its id. Only accessible by users with ADMIN role.")
     @DeleteMapping("/recipes/{id}")
     public ResponseEntity<String> deleteRecipe(@PathVariable UUID id){
         recipeService.deleteRecipe(id,false);

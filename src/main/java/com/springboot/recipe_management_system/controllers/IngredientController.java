@@ -38,7 +38,7 @@ public class IngredientController {
 
     @Operation(
             summary = "Get an ingredient by id",
-            description = "Retrieves an ingredient by id. Only accessible by ADMIN users.")
+            description = "Retrieves an ingredient by id. Only accessible by users with ADMIN role.")
     @GetMapping("/ingredients/{id}")
     public ResponseEntity<IngredientResponseDto> getIngredientById(@PathVariable UUID id) {
         return ResponseEntity.ok(ingredientService.getIngredientById(id,false));
@@ -54,7 +54,7 @@ public class IngredientController {
 
     @Operation(
             summary = "Get all ingredients",
-            description = "Retrieves a paginated list of all ingredients. Only accessible by ADMIN users.")
+            description = "Retrieves a paginated list of all ingredients. Only accessible by users with ADMIN role.")
     @GetMapping("/ingredients")
     public ResponseEntity<Page<IngredientResponseDto>> getAllIngredients(@PageableDefault(size = 15) Pageable pageable) {
         return ResponseEntity.ok(ingredientService.getAllIngredients(pageable));
@@ -72,7 +72,7 @@ public class IngredientController {
 
     @Operation(
             summary = "Add an ingredient",
-            description = "Adds a new ingredient to a recipe. Only accessible by ADMIN users.")
+            description = "Adds a new ingredient to a recipe. Only accessible by users with ADMIN role.")
     @PostMapping("/recipes/{recipeId}/ingredients")
     public ResponseEntity<String> addIngredient(@PathVariable UUID recipeId,
                                                 @RequestBody @Valid IngredientRequestDto ingredientRequestDto) {
@@ -92,7 +92,7 @@ public class IngredientController {
 
     @Operation(
             summary = "Update an ingredient",
-            description = "Updates an ingredient by id. Only accessible by ADMIN users.")
+            description = "Updates an ingredient by id. Only accessible by users with ADMIN role.")
     @PutMapping("/ingredients/{id}")
     public ResponseEntity<String> updateIngredient(@PathVariable UUID id,
                                                    @RequestBody @Valid IngredientRequestDto ingredientRequestDto){
@@ -111,7 +111,7 @@ public class IngredientController {
 
     @Operation(
             summary = "Delete an ingredient",
-            description = "Deletes an ingredient by id. Only accessible by ADMIN users.")
+            description = "Deletes an ingredient by id. Only accessible by users with ADMIN role.")
     @DeleteMapping("/ingredients/{id}")
     public ResponseEntity<String> deleteIngredient(@PathVariable UUID id){
         ingredientService.deleteIngredient(id, false);

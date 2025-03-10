@@ -9,16 +9,20 @@ import com.springboot.recipe_management_system.mappers.UserMapper;
 import com.springboot.recipe_management_system.models.Role;
 import com.springboot.recipe_management_system.models.UserEntity;
 import com.springboot.recipe_management_system.repositories.UserRepository;
+import com.springboot.recipe_management_system.security.CustomUserDetails;
 import com.springboot.recipe_management_system.security.util.JwtUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +57,25 @@ public class UserServiceImp implements UserService{
     @Override
     public Page<UserResponseDto> getAllUsers(Pageable pageable) {
         return userRepository.findAll(pageable).map(userMapper::toUserResponseDto);
+    }
+
+    @Override
+    public UserResponseDto getUserForSelf() {
+        UserEntity currentLoggedUser= getCurrentLoggedUser();
+        return getUserById(currentLoggedUser.getId());
+    }
+
+    private UserEntity getCurrentLoggedUser(){
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails userDetails)) {
+            System.out.println("Unauthorized access!");
+            throw new AccessDeniedException("Unauthorized access!");
+        }
+        if(!(userDetails instanceof CustomUserDetails customUserDetails)){
+            System.out.println("UserDetails is not an instance of CustomUserDetails!");
+            throw new ClassCastException("UserDetails is not an instance of CustomUserDetails!");
+        }
+        return customUserDetails.getUser();
     }
 
     @Override
@@ -111,12 +134,19 @@ public class UserServiceImp implements UserService{
 
     @Override
     @Transactional
+    public void updateUserForSelf(UpdateUserRequestDto updateUserRequestDto) {
+       updateUser(null, updateUserRequestDto);
+    }
+
+    @Override
+    @Transactional
     public void updateUser(UUID id, UpdateUserRequestDto updateUserRequestDto) {
         UserEntity user= userMapper.toUser(updateUserRequestDto);
         String encodedPassword= passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
-        UserEntity recoveredUser= findUserById(id);
+        UserEntity recoveredUser= id==null ? findUserById(getCurrentLoggedUser().getId()) : findUserById(id);
+        System.out.println(recoveredUser);
         validateFieldsUpdateConflict(user, recoveredUser);
 
         BeanUtils.copyProperties(user,recoveredUser,"id","roles","recipes");//Note:Ignore relationship properties

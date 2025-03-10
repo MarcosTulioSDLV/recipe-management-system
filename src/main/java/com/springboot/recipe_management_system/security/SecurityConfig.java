@@ -21,15 +21,16 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
-    //private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    //private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
 
     @Autowired
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter , CustomAuthenticationEntryPoint customAuthenticationEntryPoint /*, CustomAccessDeniedHandler customAccessDeniedHandler*/) {
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, CustomAccessDeniedHandler customAccessDeniedHandler/*, CustomAuthenticationEntryPoint customAuthenticationEntryPoint*/) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
-        /*this.customAccessDeniedHandler = customAccessDeniedHandler;*/
+        this.customAccessDeniedHandler = customAccessDeniedHandler;
+        /*this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;*/
     }
 
     @Bean
@@ -47,16 +48,18 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE,"/api/v1/roles/*").hasRole("ADMIN")
                         //User
                         .requestMatchers(HttpMethod.GET,"/api/v1/auth").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/v1/auth/self").authenticated()
                         .requestMatchers(HttpMethod.GET,"/api/v1/auth/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST,"/api/v1/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v1/auth/register").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/v1/auth/self").authenticated()
                         .requestMatchers(HttpMethod.PUT,"/api/v1/auth/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/api/v1/auth/*").hasRole("ADMIN")
                         //Recipe
-                        .requestMatchers(HttpMethod.GET, "/api/v1/recipes/self/*").authenticated() // TESTING
-                        .requestMatchers(HttpMethod.GET, "/api/v1/recipes/self").authenticated() // TESTING
-                        .requestMatchers(HttpMethod.GET, "/api/v1/recipes/*").hasRole("ADMIN") // TESTING
-                        .requestMatchers(HttpMethod.GET, "/api/v1/recipes").hasRole("ADMIN") // TESTING
+                        .requestMatchers(HttpMethod.GET, "/api/v1/recipes/self/*").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/recipes/self").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/recipes/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/recipes").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST,"/api/v1/users/self/recipes").authenticated()
                         .requestMatchers(HttpMethod.POST,"/api/v1/users/*/recipes").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,"/api/v1/recipes/self/*").authenticated()
@@ -75,11 +78,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE,"/api/v1/ingredients/self/*").authenticated()
                         .requestMatchers(HttpMethod.DELETE,"/api/v1/ingredients/*").hasRole("ADMIN")
                         .anyRequest().denyAll())
-                .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint(customAuthenticationEntryPoint))
-                /*.exceptionHandling(e-> e
+                .exceptionHandling(e-> e
                         .accessDeniedHandler(customAccessDeniedHandler) //Handles 403 Forbidden
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))//Handles 401 Unauthorized*/
+                //.exceptionHandling(exception -> exception
+                        //.authenticationEntryPoint(customAuthenticationEntryPoint))
                 .addFilterBefore(jwtAuthenticationFilter,UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
