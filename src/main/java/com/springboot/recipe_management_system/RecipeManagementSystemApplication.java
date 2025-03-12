@@ -44,7 +44,7 @@ public class RecipeManagementSystemApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		LOG.info("Hello World!");
 
-		Role role1= new Role(null,RoleEnum.ADMIN,new ArrayList<>());
+		/*Role role1= new Role(null,RoleEnum.ADMIN,new ArrayList<>());
 		Role role2= new Role(null,RoleEnum.USER,new ArrayList<>());
 
 		roleRepository.saveAll(List.of(role1,role2));
@@ -61,8 +61,9 @@ public class RecipeManagementSystemApplication implements CommandLineRunner {
 		user2.setEmail("p@gmail.com");
 		user2.setRoles(List.of(role2));
 
-		userRepository.saveAll(List.of(user1,user2));
+		userRepository.saveAll(List.of(user1,user2));*/
 
+        LOG.info("Default Admin user: marcos, Default password: 123, Encoded password: {}", passwordEncoder.encode("123"));
 	}
 
 }
