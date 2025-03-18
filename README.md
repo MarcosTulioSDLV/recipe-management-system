@@ -10,31 +10,15 @@ I used some libraries for this Rest API such **Spring Web, Spring Data JPA, Vali
 
 Below are some business rules that are essential for the system's functionality:
 
-• The course code is unique in the system, therefore, only one registration with the same code course is allowed. Similarly, for both professors and students, the document and email must also be unique in the system. Additionally, the phone number must be unique for professors.
+• The user email is unique in the system, therefore, only one registration with the same email is allowed. Additionally, the recipe description and serving are both optional fields.
 
-• A professor can teach multiple courses, while each course can be taught by only one professor. A course can have many students, and similarly, a student can be enrolled in many courses.
+• A user can have multiple recipes, while each recipe belongs to only one user. A recipe can have multiple ingredients, while each ingredient belongs to only one recipe.
 
-• In order for a student to enroll in a course, the system must check if the current students are less than the maximum students allowed. If so, the student can enroll in the course. Otherwise, the system should inform that there are no available spots in the course (the course is full).
+• Allows the creation, updating, and removal of a user, recipe, or ingredient from the system.
 
-• A student has a score for each enrolled course. The course teacher assigns the score after the student enrolls (the initial score is set to a default value of 0 once the student enrolls).
+• Allows users to retrieve the list of recipes, with optional filtering by title and username. Note that filtering supports both exact matches (full string comparison) and partial matches (e.g., searching for substrings within the title or username).
 
-• Allow the creation and removal of a professor, course, or student from the system. Once a new user is created, a default password is provided to them automatically.
-
-• After a student is removed from the system, the system must update all the related courses to reflect that an additional spot is now available (update the number of current students for those courses).
-
-• Allow students to remove themselves (or unenroll) from a particular course.
-
-• Once a student removes themselves from a course, the system must update the course to reflect that an additional spot is now available.
-
-• Allow students to enroll in courses.
-
-• Allows students to retrieve the list of courses they are enrolled in. This search can also include additional detailed information, such as their scores in the courses.
-
-• Allow professors to retrieve a list of all courses they teach.
-
-• Allows professors to retrieve the list of students enrolled in the courses they teach. This search can also include additional detailed information, such as student scores.
-
-• Allow professors to update student scores for their courses.
+• The ingredient unit simply represents the unit of measurement, such as G (Gram), KG (Kilogram), ML (Milliliter), L (Liter), PC (Piece), TSP (Teaspoon), TBSP (Tablespoon), and PINCH (A dash). The ingredient type simply refers to the ingredient itself (e.g., egg, milk, salt, etc.).
 
 
 ## Authentication
