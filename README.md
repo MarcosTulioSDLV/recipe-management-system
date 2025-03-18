@@ -16,7 +16,7 @@ Below are some business rules that are essential for the system's functionality:
 
 • Allows the creation, updating, and removal of a user, recipe, or ingredient from the system.
 
-• Allows users to retrieve the list of recipes, with optional filtering by title and username. Note that filtering supports both exact matches (full string comparison) and partial matches (e.g., searching for substrings within the title or username).
+• Allows users to retrieve the list of recipes, with optional filtering by title or username. Note that filtering supports both exact matches (full string comparison) and partial matches (e.g., searching for substrings within the title or username).
 
 • The ingredient unit simply represents the unit of measurement, such as G (Gram), KG (Kilogram), ML (Milliliter), L (Liter), PC (Piece), TSP (Teaspoon), TBSP (Tablespoon), and PINCH (A dash). The ingredient type simply refers to the ingredient itself (e.g., egg, milk, salt, etc.).
 
