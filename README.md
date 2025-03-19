@@ -30,19 +30,13 @@ ADMIN -> Administrative role with permissions to create new users, manage all re
 ```
 
 ## Database Initialization with Default Data
-For this project, default users and courses have been created for quick testing using the scheme.sql and data.sql files. Additionally, endpoints are available for registering new users, logging in, and performing operations. Note that each new user is created with a default password, which is provided automatically. 
+For this project, default users have been created for quick testing using the data.sql file.
 
 The default users were created with the following credentials:
 
-- Username: marcos, Password: 123 (ADMIN role).
+- Username: pedro, Password: 123 (USER role).
 
-- Username: pedro, Password: 123 (PROFESSOR role).
-
-- Username: leonardo, Password: 123 (PROFESSOR role).
-
-- Username: andres, Password: 123 (STUDENT role).
-
-- Username: maria, Password: 123 (STUDENT role).
+- Username: marcos, Password: 123 (both USER and ADMIN roles).
 
 ## Database Config
 For this API, the MySQL Database was used with the following configuration properties: 
