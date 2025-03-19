@@ -25,9 +25,8 @@ Below are some business rules that are essential for the system's functionality:
 The API uses Spring Security for authentication control. The following roles are available:
 
 ```
-PROFESSOR -> User role dedicated to professor-specific operations (e.g., retrieving courses, listing students enrolled in those courses, and updating student scores).
-STUDENT -> User role dedicated to student-specific operations (e.g., enrolling and unenrolling in courses, and retrieving the list of courses they are enrolled in).
-ADMIN -> Administrative role for operations such as creating new users, managing courses, and performing advanced actions (e.g., registrations, updates, or deletions).
+USER -> Standard user role, limited to basic operations (e.g., managing their own data, such as user information, recipes, and ingredients).
+ADMIN -> Administrative role with permissions to create new users, manage all recipes and ingredients, and perform advanced actions (e.g., deletions).
 ```
 
 ## Database Initialization with Default Data
