@@ -30,7 +30,7 @@ ADMIN -> Administrative role with permissions to create new users, manage all re
 ```
 
 ## Database Initialization with Default Data
-For this project, default users have been created for quick testing using the data.sql file.
+For this project, default users have been created using the data.sql file.
 
 The default users were created with the following credentials:
 
