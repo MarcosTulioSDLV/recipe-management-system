@@ -26,7 +26,7 @@ The API uses Spring Security for authentication control. The following roles are
 
 ```
 USER -> Standard user role, limited to basic operations (e.g., managing their own data, such as user information, recipes, and ingredients).
-ADMIN -> Administrative role with permissions to create new users, manage all recipes and ingredients, and perform advanced actions (e.g., deletions).
+ADMIN -> Administrative role with permissions to create new users, manage all recipes and ingredients, and perform advanced actions.
 ```
 
 ## Database Initialization with Default Data
