@@ -25,8 +25,8 @@ Below are some business rules that are essential for the system's functionality:
 The API uses Spring Security for authentication control. The following roles are available:
 
 ```
-USER -> Standard user role, limited to basic operations (e.g., managing their own data, such as user information, recipes, and ingredients).
-ADMIN -> Administrative role with permissions to create new users, manage all recipes and ingredients, and perform advanced actions.
+USER -> Standard user role, limited to default basic operations (e.g., managing their own data, such as user information, recipes, and ingredients).
+ADMIN -> Administrative role with permissions to create new users, manage all recipes and ingredients, and perform advanced actions (e.g., deletions).
 ```
 
 ## Database Initialization with Default Data
