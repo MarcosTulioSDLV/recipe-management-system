@@ -66,5 +66,4 @@ This Rest API was built with:
 
 ## System Class Diagram
 
-
 ![RecipeManagementSystemClassDiagram](https://github.com/user-attachments/assets/a33fb50e-8712-493b-8661-a624547a1570)
