@@ -39,11 +39,11 @@ The default users were created with the following credentials:
 - Username: marcos, Password: 123 (both USER and ADMIN roles).
 
 ## Database Config
-For this API, the MySQL Database was used with the following configuration properties: 
+For this API, the Postgres Database was used with the following configuration properties: 
 
-- Database name: academic_system_with_security_db
-- Username: root
-- Password:
+- Database name: recipe_management_system_db
+- Username: postgres
+- Password: 123456
 
 ## Database Initialization Configuration
 To run the application correctly, for the first time make sure the database already exists and set the following configuration in the application.properties file:
@@ -61,7 +61,7 @@ spring.sql.init.mode=embedded
 ## Development Tools
 This Rest API was built with:
 
-- Spring Boot version: 3.3.4
+- Spring Boot version: 3.4.2
 - Java version: 17
 
 ## System Class Diagram
