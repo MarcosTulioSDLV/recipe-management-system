@@ -4,7 +4,6 @@ import com.springboot.recipe_management_system.dtos.RoleResponseDto;
 import com.springboot.recipe_management_system.exceptions.RoleNotFoundException;
 import com.springboot.recipe_management_system.models.Role;
 import com.springboot.recipe_management_system.repositories.RoleRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
