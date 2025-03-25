@@ -1,7 +1,6 @@
 package com.springboot.recipe_management_system.dtos;
 
 import com.springboot.recipe_management_system.enums.RoleEnum;
-import com.springboot.recipe_management_system.repositories.RoleRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

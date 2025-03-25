@@ -1,10 +1,5 @@
 package com.springboot.recipe_management_system.dtos;
 
-import com.springboot.recipe_management_system.models.Role;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import lombok.Getter;
 import lombok.Setter;
 
