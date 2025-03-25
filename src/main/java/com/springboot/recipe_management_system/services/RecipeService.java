@@ -4,8 +4,6 @@ import com.springboot.recipe_management_system.dtos.RecipeRequestDto;
 import com.springboot.recipe_management_system.dtos.RecipeResponseDto;
 import com.springboot.recipe_management_system.models.Recipe;
 import jakarta.transaction.Transactional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -158,7 +158,6 @@ public class RecipeServiceImp implements RecipeService{
         recoveredRecipe.getIngredients().addAll(ingredients);
 
         BeanUtils.copyProperties(recipe,recoveredRecipe,"id","user","ingredients");
-        //recipeRepository.save(recoveredRecipe);
     }
 
     //Note: Validate if the recipe belongs to the current logged-in user
@@ -170,12 +169,6 @@ public class RecipeServiceImp implements RecipeService{
 
     private UserEntity getCurrentLoggedUser(){
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
-        /*if(authentication!=null){
-            System.out.println("Authentication class: " + authentication.getClass().getName());
-            System.out.println("Authorities: " + authentication.getAuthorities());
-            System.out.println("Is Not Authenticated: "+!authentication.isAuthenticated());
-            System.out.println("Is Not UserDetails: "+!(authentication.getPrincipal() instanceof UserDetails));
-        }*/
         if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails userDetails)) {
             System.out.println("Unauthorized access!");
             throw new AccessDeniedException("Unauthorized access!");
