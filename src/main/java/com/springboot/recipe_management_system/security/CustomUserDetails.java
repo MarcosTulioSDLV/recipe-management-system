@@ -24,15 +24,6 @@ public class CustomUserDetails implements UserDetails {
                 .collect(Collectors.toList());
         return authorities;
     }
-    /*@Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<? extends GrantedAuthority> authorities= userEntity.getRoles()
-                .stream()
-                .map(role-> new SimpleGrantedAuthority("ROLE_"+role))
-                .toList();
-        System.out.println("Granted authorities: "+authorities);
-        return authorities;
-    }*/
 
     public UserEntity getUser(){
         return user;

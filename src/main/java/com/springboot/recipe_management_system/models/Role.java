@@ -1,6 +1,5 @@
 package com.springboot.recipe_management_system.models;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.springboot.recipe_management_system.enums.RoleEnum;
 import jakarta.persistence.*;

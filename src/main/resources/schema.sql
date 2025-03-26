@@ -1,4 +1,4 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp"; -- Asegura que PostgreSQL soporte UUIDs
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp"; -- Ensures that PostgreSQL supports UUIDs
 
 CREATE TABLE TB_ROLE (
     id UUID PRIMARY KEY,

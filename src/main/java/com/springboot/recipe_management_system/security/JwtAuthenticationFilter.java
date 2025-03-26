@@ -1,6 +1,5 @@
 package com.springboot.recipe_management_system.security;
 
-
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.springboot.recipe_management_system.security.util.JwtUtils;
 import jakarta.servlet.FilterChain;

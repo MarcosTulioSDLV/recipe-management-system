@@ -25,7 +25,6 @@ public class SecurityConfig {
 
     //private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
-
     @Autowired
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, CustomAccessDeniedHandler customAccessDeniedHandler/*, CustomAuthenticationEntryPoint customAuthenticationEntryPoint*/) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
