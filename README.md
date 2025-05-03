@@ -61,8 +61,8 @@ spring.sql.init.mode=embedded
 ## Development Tools
 This Rest API was built with:
 
-- Spring Boot version:3.4.2
-- Java version:17
+- Spring Boot version: 3.4.2
+- Java version: 17
 
 ## System Class Diagram
 
